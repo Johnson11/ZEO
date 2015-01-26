@@ -25,4 +25,4 @@ def visualize(object):
 		medians[i]= np.median(sums[i])
 
 	plt.plot(medians)
-	plt.update()
+	plt.draw()

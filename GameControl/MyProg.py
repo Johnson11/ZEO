@@ -13,6 +13,7 @@ def getUpdate(object):
 	visualize(object)
 
 def visualize(object):
+	plt.clf()
 	sums = [[],[],[],[],[],[],[]]
 	ranges = np.arange(7)
 	trials = np.arange(len(freqs))
