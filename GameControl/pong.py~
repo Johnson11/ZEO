@@ -19,22 +19,24 @@ from pygame.locals import *
 from sys import exit
 import random
 import threading
+from random import randint
 
 VAL = 0
-
+DIFFICULTY = 140.0
 pygame.init()
 
 
 screen=pygame.display.set_mode((640,480),0,32)
-pygame.display.set_caption("Pong Pong!")
+pygame.display.set_caption("EEG Ping Pong!")
 
 #Creating 2 bars, a ball and background.
 back = pygame.Surface((640,480))
 background = back.convert()
 background.fill((0,0,0))
-bar = pygame.Surface((10,50))
+bar = pygame.Surface((10,150))
 bar1 = bar.convert()
 bar1.fill((0,0,255))
+bar = pygame.Surface((10,30))
 bar2 = bar.convert()
 bar2.fill((255,0,0))
 circ_sur = pygame.Surface((15,15))
@@ -58,16 +60,16 @@ def step():
     global VAL,ai_speed
     time_passed = clock.tick(30)
     time_sec = time_passed / 1000.0
-    ai_speed = (speed_circ * time_sec) / 10
+    ai_speed = (speed_circ * time_sec) 
     
     if VAL == 0:
-	bar1_move = ai_speed
-    elif VAL == 1:
 	bar1_move = ai_speed/2
+    elif VAL == 1:
+	bar1_move = ai_speed/4
     elif VAL == 2:
-	bar1_move = -ai_speed/2
+	bar1_move = -ai_speed/4
     elif VAL == 3:
-	bar1_move = -ai_speed
+	bar1_move = -ai_speed/2
 
 
     
@@ -94,13 +96,13 @@ def step():
     
 #AI of the computer.
     if circle_x >= 305.:
-        if not bar2_y == circle_y + 7.5:
-            if bar2_y < circle_y + 7.5:
-                bar2_y += ai_speed
-            if  bar2_y > circle_y - 42.5:
-                bar2_y -= ai_speed
+        if not bar2_y == circle_y + 50:
+            if bar2_y < circle_y + 50:
+                bar2_y += randint(0,10)
+            if  bar2_y > circle_y - 50:
+                bar2_y -= randint(0,10)
         else:
-            bar2_y == circle_y + 7.5
+            bar2_y -= randint(-10,10)
     
     if bar1_y >= 420.: bar1_y = 420.
     elif bar1_y <= 10. : bar1_y = 10.
@@ -108,21 +110,29 @@ def step():
     elif bar2_y <= 10.: bar2_y = 10.
 #since i don't know anything about collision, ball hitting bars goes like this.
     if circle_x <= bar1_x + 10.:
-        if circle_y >= bar1_y - 7.5 and circle_y <= bar1_y + 42.5:
+        if circle_y >= bar1_y - 7.5 and circle_y <= bar1_y + DIFFICULTY:
             circle_x = 20.
             speed_x = -speed_x
     if circle_x >= bar2_x - 15.:
-        if circle_y >= bar2_y - 7.5 and circle_y <= bar2_y + 42.5:
+        if circle_y >= bar2_y - 7.5 and circle_y <= bar2_y + 20:
             circle_x = 605.
             speed_x = -speed_x
     if circle_x < 5.:
         bar2_score += 1
-        circle_x, circle_y = 320., 232.5
+	choice = randint(0,1)
+	print choice
+	if choice == 0:
+		circle_x, circle_y = 320., 232.5
+	else:
+		circle_x, circle_y = 307.5, 232.5
         bar1_y,bar_2_y = 215., 215.
     elif circle_x > 620.:
         bar1_score += 1
 
-        circle_x, circle_y = 307.5, 232.5
+        if choice == 0:
+		circle_x, circle_y = 320., 232.5
+	else:
+		circle_x, circle_y = 307.5, 232.5
         bar1_y, bar2_y = 215., 215.
     if circle_y <= 10.:
         speed_y = -speed_y
